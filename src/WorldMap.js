@@ -11,17 +11,39 @@ const path = d3.geoPath().projection(projection);
 const countries = feature(worldMap, worldMap.objects.countries).features;
 
 class WorldMap extends Component {
-  render() {
+  componentDidMount() {
     console.log(worldMap);
+
+    d3.select("mapSvg")
+      .data([100, 100])
+      .enter()
+      .append("circle")
+      .attr("cx", d => {
+        return projection(d)[0];
+      })
+      .attr("cy", d => {
+        return projection(d)[1];
+      })
+      .attr("r", "3px")
+      .attr("fill", "red");
+  }
+
+  render() {
     return (
       <div className="WorldMap">
-        <svg viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
-          <g>
+        <svg
+          id="mapSvg"
+          viewBox="0 0 950 500"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g className="countries">
             {countries.map(country => {
-              console.log(country);
               return <path className="country" d={path(country)} />;
             })}
           </g>
+          {/* <g className="markers">
+            <circle cx={40.7651} cy={-73.9858} r={3} />
+          </g> */}
         </svg>
       </div>
     );
