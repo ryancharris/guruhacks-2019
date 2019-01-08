@@ -1,7 +1,7 @@
-import React, { Component, Fragment } from "react";
-
+import React, { Component } from "react";
 import * as d3 from "d3";
 import { feature } from "topojson-client";
+import Delay from "react-delay";
 
 import "./WorldMap.scss";
 import worldMap from "./json/worldMap.json";
@@ -33,6 +33,20 @@ class WorldMap extends Component {
     );
   }
 
+  drawDot(origin) {
+    return (
+      <circle
+        cx={projection(origin)[0]}
+        cy={projection(origin)[1]}
+        r={1.5}
+        fill={"#e62e6b"}
+        className="origin-point"
+      />
+    );
+  }
+
+  myFunc() {}
+
   render() {
     return (
       <div className="WorldMap">
@@ -47,28 +61,15 @@ class WorldMap extends Component {
             })}
           </g>
           <g className="markers">
-            {roiOutput.map(event => {
+            {roiOutput.map((event, index) => {
               const originCoordinates = [event.olon, event.olat];
               const destinationCoordinates = [event.dlon, event.dlat];
 
               return (
-                <Fragment>
-                  <circle
-                    cx={projection(originCoordinates)[0]}
-                    cy={projection(originCoordinates)[1]}
-                    r={1.5}
-                    fill={"#e62e6b"}
-                    className="origin-point"
-                  />
-                  {/* <circle
-                    cx={projection(destinationCoordinates)[0]}
-                    cy={projection(destinationCoordinates)[1]}
-                    r={0}
-                    fill={"purple"}
-                    className="destination-point"
-                  /> */}
+                <Delay wait={index / 3}>
                   {this.drawLine(originCoordinates, destinationCoordinates)}
-                </Fragment>
+                  {this.drawDot(originCoordinates)}
+                </Delay>
               );
             })}
           </g>
