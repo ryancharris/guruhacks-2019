@@ -1,7 +1,14 @@
 .WorldMap {
+  #mapSvg {
+    height: 95vh;
+    margin-left: 2.5vw;
+    margin-top: 0;
+    width: 95vw;
+  }
+
   .country {
-    fill: #00d6a1;
-    stroke: #001c4d;
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.35);
     stroke-width: 0.5px;
   }
 

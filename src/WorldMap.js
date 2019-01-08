@@ -27,8 +27,8 @@ class WorldMap extends Component {
       <path
         className="connection-line"
         d={pathString}
-        stroke={"blue"}
-        strokeWidth={1}
+        stroke={"#29cc96"}
+        strokeWidth={0.7}
       />
     );
   }
@@ -56,17 +56,17 @@ class WorldMap extends Component {
                   <circle
                     cx={projection(originCoordinates)[0]}
                     cy={projection(originCoordinates)[1]}
-                    r={2}
-                    fill={"red"}
+                    r={1.5}
+                    fill={"#e62e6b"}
                     className="origin-point"
                   />
-                  <circle
+                  {/* <circle
                     cx={projection(destinationCoordinates)[0]}
                     cy={projection(destinationCoordinates)[1]}
                     r={0}
                     fill={"purple"}
                     className="destination-point"
-                  />
+                  /> */}
                   {this.drawLine(originCoordinates, destinationCoordinates)}
                 </Fragment>
               );
