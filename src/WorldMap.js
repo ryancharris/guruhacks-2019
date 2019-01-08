@@ -3,7 +3,7 @@ import React, { Component, Fragment } from "react";
 import * as d3 from "d3";
 import { feature } from "topojson-client";
 
-import "./WorldMap.css";
+import "./WorldMap.scss";
 import worldMap from "./json/worldMap.json";
 import roiOutput from "./json/roiOutput.json";
 
