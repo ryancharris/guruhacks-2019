@@ -12,19 +12,39 @@
     stroke-width: 0.5px;
   }
 
+  .origin-point {
+    animation: fadeIn 5s ease-in;
+    z-index: 10;
+  }
+
   .connection-line {
-    animation: dash 5s linear infinite;
+    animation: dash 5s linear;
     animation-delay: 2s;
+    animation-fill-mode: forwards;
     stroke-dasharray: 1000;
     stroke-dashoffset: 1000;
   }
 }
 
-@keyframes dash {
+@keyframes fadeIn {
   from {
-    stroke-dashoffset: 1000;
+    opacity: 0;
   }
   to {
+    opacity: 1;
+  }
+}
+
+@keyframes dash {
+  0% {
+    opacity: 1;
+    stroke-dashoffset: 1000;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.35;
     stroke-dashoffset: 0;
   }
 }

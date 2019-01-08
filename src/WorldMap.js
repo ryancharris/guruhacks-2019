@@ -38,7 +38,7 @@ class WorldMap extends Component {
       <circle
         cx={projection(origin)[0]}
         cy={projection(origin)[1]}
-        r={1.5}
+        r={3}
         fill={"#e62e6b"}
         className="origin-point"
       />
@@ -66,7 +66,7 @@ class WorldMap extends Component {
               const destinationCoordinates = [event.dlon, event.dlat];
 
               return (
-                <Delay wait={index / 3}>
+                <Delay wait={index * 10}>
                   {this.drawLine(originCoordinates, destinationCoordinates)}
                   {this.drawDot(originCoordinates)}
                 </Delay>
