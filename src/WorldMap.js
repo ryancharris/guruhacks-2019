@@ -11,24 +11,20 @@ const path = d3.geoPath().projection(projection);
 const countries = feature(worldMap, worldMap.objects.countries).features;
 
 class WorldMap extends Component {
+  projection() {
+    return d3
+      .geoEquirectangular()
+      .scale(150)
+      .translate([950 / 2, 500 / 2]);
+  }
+
   componentDidMount() {
     console.log(worldMap);
-
-    d3.select("mapSvg")
-      .data([100, 100])
-      .enter()
-      .append("circle")
-      .attr("cx", d => {
-        return projection(d)[0];
-      })
-      .attr("cy", d => {
-        return projection(d)[1];
-      })
-      .attr("r", "3px")
-      .attr("fill", "red");
   }
 
   render() {
+    const coordinates = [-43.1729, -22.9068];
+
     return (
       <div className="WorldMap">
         <svg
@@ -41,9 +37,13 @@ class WorldMap extends Component {
               return <path className="country" d={path(country)} />;
             })}
           </g>
-          {/* <g className="markers">
-            <circle cx={40.7651} cy={-73.9858} r={3} />
-          </g> */}
+          <g className="markers">
+            <circle
+              cx={this.projection()(coordinates)[0]}
+              cy={this.projection()(coordinates)[1]}
+              r={2}
+            />
+          </g>
         </svg>
       </div>
     );
