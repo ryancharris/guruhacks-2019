@@ -33,19 +33,21 @@ class WorldMap extends Component {
     );
   }
 
-  drawDot(origin) {
+  drawDot(name, coords, isOriginPoint) {
+    const cn = isOriginPoint
+      ? "origin-point origin-point--origin"
+      : "origin-point origin-point--destination";
+
+    const radius = isOriginPoint ? 3 : 1.5;
     return (
       <circle
-        cx={projection(origin)[0]}
-        cy={projection(origin)[1]}
-        r={3}
-        fill={"#e62e6b"}
-        className="origin-point"
+        cx={projection(coords)[0]}
+        cy={projection(coords)[1]}
+        r={radius}
+        className={cn}
       />
     );
   }
-
-  myFunc() {}
 
   render() {
     return (
@@ -62,13 +64,32 @@ class WorldMap extends Component {
           </g>
           <g className="markers">
             {roiOutput.map((event, index) => {
-              const originCoordinates = [event.olon, event.olat];
-              const destinationCoordinates = [event.dlon, event.dlat];
+              const {
+                dcity,
+                dstate,
+                dcountry,
+                olon,
+                olat,
+                dlon,
+                dlat,
+                ocity,
+                ostate,
+                ocountry
+              } = event;
+              const originName = `${ocity ? ocity : null}${
+                ocity ? "," : null
+              } ${ostate ? ostate : null} ${ocountry ? ocountry : null}`;
+              const destinationName = `${dcity ? dcity : null}${
+                dcity ? "," : null
+              } ${dstate ? dstate : null} ${dcountry ? dcountry : null}`;
+              const originCoordinates = [olon, olat];
+              const destinationCoordinates = [dlon, dlat];
 
               return (
-                <Delay wait={index * 10}>
+                <Delay wait={index / 2}>
                   {this.drawLine(originCoordinates, destinationCoordinates)}
-                  {this.drawDot(originCoordinates)}
+                  {this.drawDot(originName, originCoordinates, true)}
+                  {this.drawDot(destinationName, destinationCoordinates, false)}
                 </Delay>
               );
             })}

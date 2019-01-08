@@ -8,13 +8,21 @@
 
   .country {
     fill: none;
-    stroke: rgba(255, 255, 255, 0.35);
+    stroke: darken(lightgray, 30%);
     stroke-width: 0.5px;
   }
 
   .origin-point {
     animation: fadeIn 5s ease-in;
     z-index: 10;
+
+    &--origin {
+      fill: #e62e6b;
+    }
+
+    &--destination {
+      fill: #005dff;
+    }
   }
 
   .connection-line {
@@ -37,14 +45,14 @@
 
 @keyframes dash {
   0% {
-    opacity: 1;
+    // opacity: 1;
     stroke-dashoffset: 1000;
   }
-  90% {
-    opacity: 1;
-  }
+  // 90% {
+  //   opacity: 1;
+  // }
   100% {
-    opacity: 0.35;
+    // opacity: 0.35;
     stroke-dashoffset: 0;
   }
 }
