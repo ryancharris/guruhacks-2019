@@ -15,17 +15,6 @@ const path = d3.geoPath().projection(projection);
 const countries = feature(worldMap, worldMap.objects.countries).features;
 
 class WorldMap extends Component {
-  // componentDidMount() {
-  //   const mapSvg = d3.select("#mapSvg");
-  //   const lines = mapSvg.selectAll(".connection-line");
-  //   console.log(lines);
-
-  //   lines
-  //     .transition()
-  //     .delay(500)
-  //     .duration(5000);
-  // }
-
   drawLine(origin, destination) {
     const coordData = [
       [projection(origin)[0], projection(origin)[1]],
