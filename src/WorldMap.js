@@ -15,13 +15,22 @@ const path = d3.geoPath().projection(projection);
 const countries = feature(worldMap, worldMap.objects.countries).features;
 
 class WorldMap extends Component {
+  drawLine(origin, destination) {
+    const coordData = [
+      [projection(origin)[0], projection(origin)[1]],
+      [projection(destination)[0], projection(destination)[1]]
+    ];
+    const lineGenerator = d3.line();
+    const pathString = lineGenerator(coordData);
+
+    return <path d={pathString} stroke={"blue"} strokeWidth={1} />;
+  }
+
   render() {
     return (
       <div className="WorldMap">
         <svg
           id="mapSvg"
-          // width="950"
-          // height="500"
           viewBox="0 0 950 500"
           xmlns="http://www.w3.org/2000/svg"
         >
@@ -34,6 +43,7 @@ class WorldMap extends Component {
             {roiOutput.map(event => {
               const originCoordinates = [event.olon, event.olat];
               const destinationCoordinates = [event.dlon, event.dlat];
+
               return (
                 <Fragment>
                   <circle
@@ -50,14 +60,10 @@ class WorldMap extends Component {
                     fill={"purple"}
                     className="destination-point"
                   />
+                  {this.drawLine(originCoordinates, destinationCoordinates)}
                 </Fragment>
               );
             })}
-            {/* <circle
-              cx={this.projection()(coordinates)[0]}
-              cy={this.projection()(coordinates)[1]}
-              r={2}
-            /> */}
           </g>
         </svg>
       </div>
