@@ -7,7 +7,6 @@ import "./WorldMap.css";
 import worldMap from "./json/worldMap.json";
 import roiOutput from "./json/roiOutput.json";
 
-const mapCenter = d3.geoCentroid(feature(worldMap, worldMap.objects.countries));
 const projection = d3
   .geoEquirectangular()
   .scale(150)
