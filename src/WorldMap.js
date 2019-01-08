@@ -15,6 +15,17 @@ const path = d3.geoPath().projection(projection);
 const countries = feature(worldMap, worldMap.objects.countries).features;
 
 class WorldMap extends Component {
+  // componentDidMount() {
+  //   const mapSvg = d3.select("#mapSvg");
+  //   const lines = mapSvg.selectAll(".connection-line");
+  //   console.log(lines);
+
+  //   lines
+  //     .transition()
+  //     .delay(500)
+  //     .duration(5000);
+  // }
+
   drawLine(origin, destination) {
     const coordData = [
       [projection(origin)[0], projection(origin)[1]],
@@ -23,7 +34,14 @@ class WorldMap extends Component {
     const lineGenerator = d3.line();
     const pathString = lineGenerator(coordData);
 
-    return <path d={pathString} stroke={"blue"} strokeWidth={1} />;
+    return (
+      <path
+        className="connection-line"
+        d={pathString}
+        stroke={"blue"}
+        strokeWidth={1}
+      />
+    );
   }
 
   render() {
@@ -56,7 +74,7 @@ class WorldMap extends Component {
                   <circle
                     cx={projection(destinationCoordinates)[0]}
                     cy={projection(destinationCoordinates)[1]}
-                    r={2}
+                    r={0}
                     fill={"purple"}
                     className="destination-point"
                   />
