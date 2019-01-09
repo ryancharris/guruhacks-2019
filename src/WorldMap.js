@@ -17,11 +17,9 @@ function createCityName(event) {
   const destination = `${dcity}, ${dstate} ${dcountry}`;
   const origin = `${ocity}, ${ostate} ${ocountry}`;
   const cleanedOrigin = origin.replace(/"/g, "");
+  const location = cleanedOrigin ? cleanedOrigin : destination;
 
-  return {
-    destinationName: destination,
-    originName: cleanedOrigin
-  };
+  return location;
 }
 
 class WorldMap extends Component {
@@ -54,7 +52,7 @@ class WorldMap extends Component {
     const citiesNode = d3.select(this.refs.citiesRef);
     // const tooltip = d3.select(this.refs.tooltip);
 
-    let div = d3
+    let tooltip = d3
       .select("body")
       .append("div")
       .attr("class", "tooltip")
@@ -71,18 +69,17 @@ class WorldMap extends Component {
         .attr("r", 3)
         .attr("class", "origin-point origin-point--origin")
         .on("mouseover", () => {
-          console.log("mouseover", event);
-          div
+          tooltip
             .transition()
             .duration(200)
             .style("opacity", 0.9);
-          div
+          tooltip
+            .html(`<p>${createCityName(event)}</p>`)
             .style("left", d3.event.pageX + "px")
             .style("top", d3.event.pageY - 28 + "px");
         })
         .on("mouseout", () => {
-          console.log("mouseout");
-          div
+          tooltip
             .transition()
             .duration(500)
             .style("opacity", 0);
@@ -148,7 +145,6 @@ class WorldMap extends Component {
             <g className="connection-lines" ref="connectionLinesRef" />
           </svg>
         </div>
-        {/* <div className="tooltip" ref="tooltipRef" /> */}
         <div className="WorldMap__footer">
           <h1 className="WorldMap__title">
             Global Content Tracking Consumption

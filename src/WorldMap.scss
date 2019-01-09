@@ -1,14 +1,19 @@
 div.tooltip {
+  align-items: center;
   background: lightsteelblue;
   border: 0px;
   border-radius: 8px;
-  font: 12px sans-serif;
-  height: 28px;
-  padding: 2px;
+  cursor: pointer;
+  display: flex;
+  font-family: "Montserrat", sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  height: 20px;
+  justify-content: center;
+  padding: 8px;
   pointer-events: none;
   position: absolute;
-  text-align: center;
-  width: 60px;
+  width: auto;
 }
 
 .WorldMap {
