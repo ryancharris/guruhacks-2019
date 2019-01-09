@@ -1,10 +1,6 @@
 import React, { Component, Fragment } from "react";
 import * as d3 from "d3";
 import { feature } from "topojson-client";
-// import Delay from "react-delay";
-
-// import CityDot from "./CityDot";
-// import ConnectionLine from "./ConnectionLine";
 
 import "./WorldMap.scss";
 import worldMap from "./json/worldMap.json";
