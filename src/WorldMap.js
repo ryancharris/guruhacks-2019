@@ -58,14 +58,17 @@ class WorldMap extends Component {
     this.setState({ worldMap, roiOutput });
   }
 
-  componentDidMount() {
+  renderCountries() {
     const countryNode = d3.select(this.refs.countriesRef);
-
     countryNode
       .append("path")
       .datum(feature(worldMap, worldMap.objects.countries))
       .attr("d", path)
       .attr("class", "country");
+  }
+
+  componentDidMount() {
+    this.renderCountries();
   }
 
   drawLine(origin, destination) {
