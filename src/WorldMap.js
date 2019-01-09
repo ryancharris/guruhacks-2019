@@ -5,6 +5,7 @@ import { feature } from "topojson-client";
 import "./WorldMap.scss";
 import worldMap from "./json/worldMap.json";
 import roiOutput from "./json/roiOutput.json";
+import cardData from "./json/createViewData.json";
 
 const projection = d3
   .geoMercator() // or geoEquirectangular
@@ -24,24 +25,46 @@ function createCityName(event, type) {
 
 class WorldMap extends Component {
   state = {
-    worldMap: null,
-    roiOutput: null,
-    title: "Content ROI Events"
+    worldMap: worldMap,
+    data: null,
+    title: "guruHacks 2019",
+    subtitle: "by Lisa, Pete & Ryan H."
   };
 
-  componentWillMount() {
-    this.setState({ worldMap, roiOutput });
+  componentDidMount() {
+    // Select outermost <div> and append an <svg> to it
+    const worldMapNode = d3.select("#worldMapRef");
+    worldMapNode
+      .append("svg")
+      .attr("id", "mapSvg")
+      .attr("viewBox", "0 0 950 500")
+      .attr("xmlns", "http://www.w3.org/2000/svg");
+
+    // Select the <svg> and add three <g> to it for SVG element rendering
+    const svg = d3.select("#mapSvg");
+    svg
+      .append("g")
+      .attr("class", "countries")
+      .attr("id", "countriesRef");
+    svg
+      .append("g")
+      .attr("class", "cities")
+      .attr("id", "citiesRef");
+    svg
+      .append("g")
+      .attr("class", "connection-lines")
+      .attr("id", "connectionLinesRef");
+
+    this.renderCountries();
   }
 
-  componentDidMount() {
-    this.renderCountries();
-    this.renderOriginPoints();
-    this.renderDestinationPoints();
+  componentDidUpdate() {
+    this.renderCityDots();
     this.renderConnectionLines();
   }
 
   renderCountries() {
-    const countryNode = d3.select(this.refs.countriesRef);
+    const countryNode = d3.select("#countriesRef");
     countryNode
       .append("path")
       .datum(feature(worldMap, worldMap.objects.countries))
@@ -49,9 +72,9 @@ class WorldMap extends Component {
       .attr("class", "country");
   }
 
-  renderOriginPoints() {
-    const citiesNode = d3.select(this.refs.citiesRef);
-    // const tooltip = d3.select(this.refs.tooltip);
+  renderCityDots() {
+    const { data } = this.state;
+    const citiesNode = d3.select("#citiesRef");
 
     const tooltip = d3
       .select("body")
@@ -59,9 +82,10 @@ class WorldMap extends Component {
       .attr("class", "tooltip")
       .style("opacity", 0);
 
-    roiOutput.forEach(event => {
-      const { olon, olat } = event;
+    data.forEach(event => {
+      const { dlon, dlat, olon, olat } = event;
       const originCoordinates = [olon, olat];
+      const destinationCoordinates = [dlon, dlat];
       const type = "origin";
 
       citiesNode
@@ -86,27 +110,11 @@ class WorldMap extends Component {
             .duration(500)
             .style("opacity", 0);
         });
-    });
-  }
-
-  renderDestinationPoints() {
-    const citiesNode = d3.select(this.refs.citiesRef);
-    const type = "destination";
-
-    let tooltip = d3
-      .select("body")
-      .append("div")
-      .attr("class", "tooltip")
-      .style("opacity", 0);
-
-    roiOutput.forEach(event => {
-      const { dlon, dlat } = event;
-      const destCoords = [dlon, dlat];
 
       citiesNode
         .append("circle")
-        .attr("cx", projection(destCoords)[0])
-        .attr("cy", projection(destCoords)[1])
+        .attr("cx", projection(destinationCoordinates)[0])
+        .attr("cy", projection(destinationCoordinates)[1])
         .attr("r", 1.5)
         .attr("class", "origin-point origin-point--destination")
         .on("mouseover", () => {
@@ -129,9 +137,10 @@ class WorldMap extends Component {
   }
 
   renderConnectionLines() {
-    const linesNode = d3.select(this.refs.connectionLinesRef);
+    const { data } = this.state;
+    const linesNode = d3.select("#connectionLinesRef");
 
-    roiOutput.forEach(event => {
+    data.forEach(event => {
       const { olon, olat, dlon, dlat } = event;
       const origin = [olon, olat];
       const destination = [dlon, dlat];
@@ -157,35 +166,35 @@ class WorldMap extends Component {
   }
 
   handleCardClick = () => {
+    d3.selectAll(".connection-line").remove();
+    d3.selectAll(".origin-point").remove();
+
     this.setState({
-      title: "Guru Card Events"
+      title: "Guru Card Events",
+      subtitle: "Dec. 1, 2018 to Dec. 7, 2018",
+      data: cardData
     });
   };
 
   handleContentClick = () => {
+    d3.selectAll(".connection-line").remove();
+    d3.selectAll(".origin-point").remove();
+
     this.setState({
-      title: "Content ROI Events"
+      title: "Content ROI Events",
+      subtitle: "All Time",
+      data: roiOutput
     });
   };
 
   render() {
-    const { title } = this.state;
+    const { subtitle, title } = this.state;
     return (
       <Fragment>
-        <div className="WorldMap">
-          <svg
-            id="mapSvg"
-            viewBox="0 0 950 500"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <g className="countries" ref="countriesRef" />
-            <g className="cities" ref="citiesRef" />
-            <g className="connection-lines" ref="connectionLinesRef" />
-          </svg>
-        </div>
+        <div className="WorldMap" id="worldMapRef" />
         <div className="WorldMap__footer">
           <h1 className="WorldMap__title">{title}</h1>
-          <h2 className="WorldMap__sub-title">December 2018</h2>
+          <h2 className="WorldMap__sub-title">{subtitle}</h2>
           <div className="WorldMap__buttons">
             <button className="WorldMap__btn" onClick={this.handleContentClick}>
               Content ROI
