@@ -1,30 +1,84 @@
 .WorldMap {
   #mapSvg {
-    height: 95vh;
-    margin-left: 2.5vw;
-    margin-top: 0;
-    width: 95vw;
+    height: 100vh;
+    width: 100vw;
   }
 
   .country {
     fill: none;
-    stroke: rgba(255, 255, 255, 0.35);
+    stroke: darken(lightgray, 30%);
     stroke-width: 0.5px;
   }
 
+  .origin-point {
+    animation: fadeIn 5s ease-in;
+    z-index: 10;
+
+    &--origin {
+      fill: #e62e6b;
+    }
+
+    &--destination {
+      fill: #005dff;
+    }
+  }
+
   .connection-line {
-    animation: dash 5s linear infinite;
-    animation-delay: 2s;
+    animation: dash 5s linear;
+    animation-delay: 5s;
+    animation-fill-mode: forwards;
+    stroke: #29cc96;
     stroke-dasharray: 1000;
     stroke-dashoffset: 1000;
+    stroke-width: 0.7;
+  }
+}
+
+.WorldMap__footer {
+  bottom: 4%;
+  left: 0;
+  position: absolute;
+  right: 0;
+}
+
+.WorldMap__title,
+.WorldMap__sub-title {
+  color: #fff;
+  font-family: "Montserrat", sans-serif;
+  margin-top: 0;
+  text-align: center;
+  text-shadow: 3px 4px 3px rgba(230, 46, 107, 0.25);
+}
+
+.WorldMap__title {
+  font-size: 36px;
+  margin-bottom: 15px;
+}
+
+.WorldMap__sub-title {
+  font-size: 18px;
+  margin-bottom: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
 @keyframes dash {
-  from {
+  0% {
+    // opacity: 1;
     stroke-dashoffset: 1000;
   }
-  to {
+  // 90% {
+  //   opacity: 1;
+  // }
+  100% {
+    // opacity: 0.35;
     stroke-dashoffset: 0;
   }
 }
