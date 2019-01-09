@@ -12,12 +12,12 @@ const projection = d3
   .translate([950 / 2, 500 / 2]);
 const path = d3.geoPath(projection);
 
-function createCityName(event) {
+function createCityName(event, type) {
   const { dcity, dstate, dcountry, ocity, ostate, ocountry } = event;
   const destination = `${dcity}, ${dstate} ${dcountry}`;
   const origin = `${ocity}, ${ostate} ${ocountry}`;
   const cleanedOrigin = origin.replace(/"/g, "");
-  const location = cleanedOrigin ? cleanedOrigin : destination;
+  const location = type === "origin" ? cleanedOrigin : destination;
 
   return location;
 }
@@ -52,7 +52,7 @@ class WorldMap extends Component {
     const citiesNode = d3.select(this.refs.citiesRef);
     // const tooltip = d3.select(this.refs.tooltip);
 
-    let tooltip = d3
+    const tooltip = d3
       .select("body")
       .append("div")
       .attr("class", "tooltip")
@@ -61,6 +61,7 @@ class WorldMap extends Component {
     roiOutput.forEach(event => {
       const { olon, olat } = event;
       const originCoordinates = [olon, olat];
+      const type = "origin";
 
       citiesNode
         .append("circle")
@@ -74,7 +75,7 @@ class WorldMap extends Component {
             .duration(200)
             .style("opacity", 0.9);
           tooltip
-            .html(`<p>${createCityName(event)}</p>`)
+            .html(`<p>${createCityName(event, type)}</p>`)
             .style("left", d3.event.pageX + "px")
             .style("top", d3.event.pageY - 28 + "px");
         })
@@ -89,6 +90,13 @@ class WorldMap extends Component {
 
   renderDestinationPoints() {
     const citiesNode = d3.select(this.refs.citiesRef);
+    const type = "destination";
+
+    let tooltip = d3
+      .select("body")
+      .append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
 
     roiOutput.forEach(event => {
       const { dlon, dlat } = event;
@@ -99,7 +107,23 @@ class WorldMap extends Component {
         .attr("cx", projection(destCoords)[0])
         .attr("cy", projection(destCoords)[1])
         .attr("r", 1.5)
-        .attr("class", "origin-point origin-point--destination");
+        .attr("class", "origin-point origin-point--destination")
+        .on("mouseover", () => {
+          tooltip
+            .transition()
+            .duration(200)
+            .style("opacity", 0.9);
+          tooltip
+            .html(`<p>${createCityName(event, type)}</p>`)
+            .style("left", d3.event.pageX + "px")
+            .style("top", d3.event.pageY - 28 + "px");
+        })
+        .on("mouseout", () => {
+          tooltip
+            .transition()
+            .duration(500)
+            .style("opacity", 0);
+        });
     });
   }
 
