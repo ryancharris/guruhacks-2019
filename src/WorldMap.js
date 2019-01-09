@@ -50,6 +50,20 @@ class WorldMap extends Component {
   //     );
   //   });
   // }
+  state = {
+    worldMap: null,
+    roiOutput: null
+  };
+
+  componentWillMount() {
+    this.setState({ worldMap, roiOutput });
+  }
+
+  componentDidMount() {
+    const countryNode = d3.select(this.refs.countriesRef);
+    console.log("node", countryNode);
+    countryNode.append("path").attr("class", "country");
+  }
 
   drawLine(origin, destination) {
     const coordData = [
@@ -81,11 +95,12 @@ class WorldMap extends Component {
             viewBox="0 0 950 500"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <g className="countries">
+            {/* <g className="countries">
               {countries.map(country => {
                 return <path className="country" d={path(country)} />;
               })}
-            </g>
+            </g> */}
+            <g className="countries" ref="countriesRef" />
             <g className="markers">
               {roiOutput.map((event, index) => {
                 const { olon, olat, dlon, dlat } = event;
