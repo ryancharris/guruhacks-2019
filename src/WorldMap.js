@@ -25,7 +25,8 @@ function createCityName(event, type) {
 class WorldMap extends Component {
   state = {
     worldMap: null,
-    roiOutput: null
+    roiOutput: null,
+    title: "Content ROI Events"
   };
 
   componentWillMount() {
@@ -155,7 +156,20 @@ class WorldMap extends Component {
     });
   }
 
+  handleCardClick = () => {
+    this.setState({
+      title: "Guru Card Events"
+    });
+  };
+
+  handleContentClick = () => {
+    this.setState({
+      title: "Content ROI Events"
+    });
+  };
+
   render() {
+    const { title } = this.state;
     return (
       <Fragment>
         <div className="WorldMap">
@@ -170,10 +184,16 @@ class WorldMap extends Component {
           </svg>
         </div>
         <div className="WorldMap__footer">
-          <h1 className="WorldMap__title">
-            Global Content Tracking Consumption
-          </h1>
+          <h1 className="WorldMap__title">{title}</h1>
           <h2 className="WorldMap__sub-title">December 2018</h2>
+          <div className="WorldMap__buttons">
+            <button className="WorldMap__btn" onClick={this.handleContentClick}>
+              Content ROI
+            </button>
+            <button className="WorldMap__btn" onClick={this.handleCardClick}>
+              Card Events
+            </button>
+          </div>
         </div>
       </Fragment>
     );
