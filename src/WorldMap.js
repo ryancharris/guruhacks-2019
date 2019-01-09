@@ -37,7 +37,8 @@ class WorldMap extends Component {
     this.renderCountries();
     this.renderOriginPoints();
     this.renderDestinationPoints();
-    this.renderConnectionLines();
+    // this.renderConnectionLines();
+    this.renderCurvedLines();
   }
 
   renderCountries() {
@@ -128,20 +129,93 @@ class WorldMap extends Component {
     });
   }
 
-  renderConnectionLines() {
-    const linesNode = d3.select(this.refs.connectionLinesRef);
+  // renderConnectionLines() {
+  //   const linesNode = d3.select(this.refs.connectionLinesRef);
 
+  //   roiOutput.forEach(event => {
+  //     const { olon, olat, dlon, dlat } = event;
+  //     const origin = [olon, olat];
+  //     const destination = [dlon, dlat];
+
+  //     const coordData = [
+  //       [projection(origin)[0], projection(origin)[1]],
+  //       [projection(destination)[0], projection(destination)[1]]
+  //     ];
+  //     const lineGenerator = d3.line();
+  //     const pathString = lineGenerator(coordData);
+
+  //     linesNode
+  //       .append("path")
+  //       .attr("d", pathString)
+  //       .attr("class", "connection-line")
+  //       .on("mouseover", function() {
+  //         this.classList.add("connection-line--hover");
+  //       })
+  //       .on("mouseout", function() {
+  //         this.classList.remove("connection-line--hover");
+  //       });
+  //   });
+  // }
+
+  renderCurvedLines() {
+    const linesNode = d3.select(this.refs.connectionLinesRef);
     roiOutput.forEach(event => {
       const { olon, olat, dlon, dlat } = event;
       const origin = [olon, olat];
-      const destination = [dlon, dlat];
+      const dest = [dlon, dlat];
+      const mid = [(origin[0] + dest[0]) / 2, (origin[1] + dest[1]) / 2];
 
-      const coordData = [
-        [projection(origin)[0], projection(origin)[1]],
-        [projection(destination)[0], projection(destination)[1]]
-      ];
-      const lineGenerator = d3.line();
-      const pathString = lineGenerator(coordData);
+      const curveoffset = 5;
+      const midcurve = [mid[0] + curveoffset, mid[1] - curveoffset];
+      // the scalar variable is used to scale the curve's derivative into a unit vector
+      const scalar = Math.sqrt(
+        Math.pow(projection(dest)[0], 2) -
+          2 * projection(dest)[0] * projection(midcurve)[0] +
+          Math.pow(projection(midcurve)[0], 2) +
+          Math.pow(projection(dest)[1], 2) -
+          2 * projection(dest)[1] * projection(midcurve)[1] +
+          Math.pow(projection(midcurve)[1], 2)
+      );
+
+      // const coordData = [
+      //   [projection(origin)[0], projection(origin)[1]],
+      //   [projection(dest)[0], projection(dest)[1]]
+      // ];
+      // const lineGenerator = d3.line();
+      // const pathString = lineGenerator(coordData);
+      // M281.2749980133244,133.05247801290298L182.36666570403014,133.42598440095506
+      const pathString =
+        "M" +
+        projection(origin)[0] +
+        "," +
+        projection(origin)[1] +
+        // smooth curve to offset midpoint
+        "S" +
+        projection(midcurve)[0] +
+        "," +
+        projection(midcurve)[1] +
+        //smooth curve to destination
+        "," +
+        projection(dest)[0] +
+        "," +
+        projection(dest)[1] +
+        // straight line towards original curve along scaled orthogonal vector (creates notched arrow head)
+        "l" +
+        (0.3 * (-projection(dest)[1] + projection(midcurve)[1])) / scalar +
+        "," +
+        (0.3 * (projection(dest)[0] - projection(midcurve)[0])) / scalar +
+        // smooth curve to midpoint
+        "S" +
+        projection(midcurve)[0] +
+        "," +
+        projection(midcurve)[1] +
+        //smooth curve to origin
+        "," +
+        projection(origin)[0] +
+        "," +
+        projection(origin)[1];
+
+      // console.log("pathString", pathString);
 
       linesNode
         .append("path")

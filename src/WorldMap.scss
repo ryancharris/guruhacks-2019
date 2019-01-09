@@ -45,6 +45,7 @@ div.tooltip {
     animation: dash 5s linear;
     animation-delay: 5s;
     animation-fill-mode: forwards;
+    fill: none;
     stroke: #29cc96;
     stroke-dasharray: 1000;
     stroke-dashoffset: 1000;
