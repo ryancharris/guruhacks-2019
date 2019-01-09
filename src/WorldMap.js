@@ -8,10 +8,10 @@ import worldMap from "./json/worldMap.json";
 import roiOutput from "./json/roiOutput.json";
 
 const projection = d3
-  .geoEquirectangular()
+  .geoMercator() // or geoEquirectangular
   .scale(150)
   .translate([950 / 2, 500 / 2]);
-const path = d3.geoPath().projection(projection);
+const path = d3.geoPath(projection);
 const countries = feature(worldMap, worldMap.objects.countries).features;
 
 function createCityName(event) {
