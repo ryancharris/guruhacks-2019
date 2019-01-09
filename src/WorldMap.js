@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import * as d3 from "d3";
 import { feature } from "topojson-client";
 import Delay from "react-delay";
@@ -14,7 +14,40 @@ const projection = d3
 const path = d3.geoPath().projection(projection);
 const countries = feature(worldMap, worldMap.objects.countries).features;
 
+function createCityName(event) {
+  const { dcity, dstate, dcountry, ocity, ostate, ocountry } = event;
+  const destination = `${dcity}, ${dstate} ${dcountry}`;
+  const origin = `${ocity}, ${ostate} ${ocountry}`;
+  const cleanedOrigin = origin.replace(/"/g, "");
+
+  return {
+    destinationName: destination,
+    originName: cleanedOrigin
+  };
+}
+
 class WorldMap extends Component {
+  // createCityLabels(originCoords, destinationCoords) {
+  //   return roiOutput.map(event => {
+  //     const cityNames = createCityName(event);
+  //     const { originName, destinationName } = cityNames;
+
+  //     return (
+  //       <Fragment>
+  //         <text x={projection(originCoords)[0]} y={projection(originCoords)[1]}>
+  //           {originName}
+  //         </text>
+  //         <text
+  //           x={projection(destinationCoords)[0]}
+  //           y={projection(destinationCoords)[1]}
+  //         >
+  //           {destinationName}
+  //         </text>
+  //       </Fragment>
+  //     );
+  //   });
+  // }
+
   drawLine(origin, destination) {
     const coordData = [
       [projection(origin)[0], projection(origin)[1]],
@@ -40,62 +73,65 @@ class WorldMap extends Component {
 
     const radius = isOriginPoint ? 3 : 1.5;
     return (
-      <circle
-        cx={projection(coords)[0]}
-        cy={projection(coords)[1]}
-        r={radius}
-        className={cn}
-      />
+      <Fragment>
+        <circle
+          cx={projection(coords)[0]}
+          cy={projection(coords)[1]}
+          r={radius}
+          className={cn}
+        />
+      </Fragment>
     );
   }
 
   render() {
     return (
-      <div className="WorldMap">
-        <svg
-          id="mapSvg"
-          viewBox="0 0 950 500"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <g className="countries">
-            {countries.map(country => {
-              return <path className="country" d={path(country)} />;
-            })}
-          </g>
-          <g className="markers">
-            {roiOutput.map((event, index) => {
-              const {
-                dcity,
-                dstate,
-                dcountry,
-                olon,
-                olat,
-                dlon,
-                dlat,
-                ocity,
-                ostate,
-                ocountry
-              } = event;
-              const originName = `${ocity ? ocity : null}${
-                ocity ? "," : null
-              } ${ostate ? ostate : null} ${ocountry ? ocountry : null}`;
-              const destinationName = `${dcity ? dcity : null}${
-                dcity ? "," : null
-              } ${dstate ? dstate : null} ${dcountry ? dcountry : null}`;
-              const originCoordinates = [olon, olat];
-              const destinationCoordinates = [dlon, dlat];
+      <Fragment>
+        <div className="WorldMap">
+          <svg
+            id="mapSvg"
+            viewBox="0 0 950 500"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g className="countries">
+              {countries.map(country => {
+                return <path className="country" d={path(country)} />;
+              })}
+            </g>
+            <g className="markers">
+              {roiOutput.map((event, index) => {
+                const { olon, olat, dlon, dlat } = event;
+                const cityNames = createCityName(event);
+                const { originName, destinationName } = cityNames;
+                const originCoordinates = [olon, olat];
+                const destinationCoordinates = [dlon, dlat];
 
-              return (
-                <Delay wait={index / 2}>
-                  {this.drawLine(originCoordinates, destinationCoordinates)}
-                  {this.drawDot(originName, originCoordinates, true)}
-                  {this.drawDot(destinationName, destinationCoordinates, false)}
-                </Delay>
-              );
-            })}
-          </g>
-        </svg>
-      </div>
+                return (
+                  <Delay wait={index / 2}>
+                    {this.drawLine(originCoordinates, destinationCoordinates)}
+                    {this.drawDot(originName, originCoordinates, true)}
+                    {this.drawDot(
+                      destinationName,
+                      destinationCoordinates,
+                      false
+                    )}
+                    {/* {this.createCityLabels(
+                      originCoordinates,
+                      destinationCoordinates
+                    )} */}
+                  </Delay>
+                );
+              })}
+            </g>
+          </svg>
+        </div>
+        <div className="WorldMap__footer">
+          <h1 className="WorldMap__title">
+            Global Content Tracking Consumption
+          </h1>
+          <h2 className="WorldMap__sub-title">December 2018</h2>
+        </div>
+      </Fragment>
     );
   }
 }

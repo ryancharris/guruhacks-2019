@@ -34,6 +34,32 @@
   }
 }
 
+.WorldMap__footer {
+  bottom: 4%;
+  left: 0;
+  position: absolute;
+  right: 0;
+}
+
+.WorldMap__title,
+.WorldMap__sub-title {
+  color: #fff;
+  font-family: "Montserrat", sans-serif;
+  margin-top: 0;
+  text-align: center;
+  text-shadow: 3px 4px 3px rgba(230, 46, 107, 0.25);
+}
+
+.WorldMap__title {
+  font-size: 36px;
+  margin-bottom: 15px;
+}
+
+.WorldMap__sub-title {
+  font-size: 18px;
+  margin-bottom: 0;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
