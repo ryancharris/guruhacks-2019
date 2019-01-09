@@ -1,3 +1,16 @@
+div.tooltip {
+  background: lightsteelblue;
+  border: 0px;
+  border-radius: 8px;
+  font: 12px sans-serif;
+  height: 28px;
+  padding: 2px;
+  pointer-events: none;
+  position: absolute;
+  text-align: center;
+  width: 60px;
+}
+
 .WorldMap {
   #mapSvg {
     height: 100vh;

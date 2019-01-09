@@ -45,6 +45,13 @@ class WorldMap extends Component {
 
   renderOriginPoints() {
     const citiesNode = d3.select(this.refs.citiesRef);
+    // const tooltip = d3.select(this.refs.tooltip);
+
+    let div = d3
+      .select("body")
+      .append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
 
     roiOutput.forEach(event => {
       const { olon, olat } = event;
@@ -55,7 +62,24 @@ class WorldMap extends Component {
         .attr("cx", projection(originCoordinates)[0])
         .attr("cy", projection(originCoordinates)[1])
         .attr("r", 3)
-        .attr("class", "origin-point origin-point--origin");
+        .attr("class", "origin-point origin-point--origin")
+        .on("mouseover", () => {
+          console.log("mouseover", event);
+          div
+            .transition()
+            .duration(200)
+            .style("opacity", 0.9);
+          div
+            .style("left", d3.event.pageX + "px")
+            .style("top", d3.event.pageY - 28 + "px");
+        })
+        .on("mouseout", () => {
+          console.log("mouseout");
+          div
+            .transition()
+            .duration(500)
+            .style("opacity", 0);
+        });
     });
   }
 
@@ -118,6 +142,7 @@ class WorldMap extends Component {
             <g className="connection-lines" ref="connectionLinesRef" />
           </svg>
         </div>
+        {/* <div className="tooltip" ref="tooltipRef" /> */}
         <div className="WorldMap__footer">
           <h1 className="WorldMap__title">
             Global Content Tracking Consumption
