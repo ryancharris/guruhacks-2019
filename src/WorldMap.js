@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
 import * as d3 from "d3";
 import { feature } from "topojson-client";
+import get from "lodash.get";
 
 import "./WorldMap.scss";
 import worldMap from "./json/worldMap.json";
@@ -63,6 +64,74 @@ class WorldMap extends Component {
     this.renderConnectionLines();
   }
 
+  createOriginPoint(event, originCoordinates) {
+    const citiesNode = d3.select("#citiesRef");
+    const type = "origin";
+
+    const tooltip = d3
+      .select("body")
+      .append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
+
+    citiesNode
+      .append("circle")
+      .attr("cx", projection(originCoordinates)[0])
+      .attr("cy", projection(originCoordinates)[1])
+      .attr("r", 3)
+      .attr("class", "origin-point origin-point--origin")
+      .on("mouseover", () => {
+        tooltip
+          .transition()
+          .duration(200)
+          .style("opacity", 0.9);
+        tooltip
+          .html(`<p>${createCityName(event, type)}</p>`)
+          .style("left", d3.event.pageX + "px")
+          .style("top", d3.event.pageY - 28 + "px");
+      })
+      .on("mouseout", () => {
+        tooltip
+          .transition()
+          .duration(500)
+          .style("opacity", 0);
+      });
+  }
+
+  createDestinationPoint(event, destinationCoordinates) {
+    const citiesNode = d3.select("#citiesRef");
+    const type = "origin";
+
+    const tooltip = d3
+      .select("body")
+      .append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
+
+    citiesNode
+      .append("circle")
+      .attr("cx", projection(destinationCoordinates)[0])
+      .attr("cy", projection(destinationCoordinates)[1])
+      .attr("r", 1.5)
+      .attr("class", "origin-point origin-point--destination")
+      .on("mouseover", () => {
+        tooltip
+          .transition()
+          .duration(200)
+          .style("opacity", 0.9);
+        tooltip
+          .html(`<p>${createCityName(event, type)}</p>`)
+          .style("left", d3.event.pageX + "px")
+          .style("top", d3.event.pageY - 28 + "px");
+      })
+      .on("mouseout", () => {
+        tooltip
+          .transition()
+          .duration(500)
+          .style("opacity", 0);
+      });
+  }
+
   renderCountries() {
     const countryNode = d3.select("#countriesRef");
     countryNode
@@ -74,65 +143,24 @@ class WorldMap extends Component {
 
   renderCityDots() {
     const { data } = this.state;
-    const citiesNode = d3.select("#citiesRef");
-
-    const tooltip = d3
-      .select("body")
-      .append("div")
-      .attr("class", "tooltip")
-      .style("opacity", 0);
 
     data.forEach(event => {
       const { dlon, dlat, olon, olat } = event;
+      const eventType = get(event, "type", null);
       const originCoordinates = [olon, olat];
       const destinationCoordinates = [dlon, dlat];
-      const type = "origin";
 
-      citiesNode
-        .append("circle")
-        .attr("cx", projection(originCoordinates)[0])
-        .attr("cy", projection(originCoordinates)[1])
-        .attr("r", 3)
-        .attr("class", "origin-point origin-point--origin")
-        .on("mouseover", () => {
-          tooltip
-            .transition()
-            .duration(200)
-            .style("opacity", 0.9);
-          tooltip
-            .html(`<p>${createCityName(event, type)}</p>`)
-            .style("left", d3.event.pageX + "px")
-            .style("top", d3.event.pageY - 28 + "px");
-        })
-        .on("mouseout", () => {
-          tooltip
-            .transition()
-            .duration(500)
-            .style("opacity", 0);
-        });
-
-      citiesNode
-        .append("circle")
-        .attr("cx", projection(destinationCoordinates)[0])
-        .attr("cy", projection(destinationCoordinates)[1])
-        .attr("r", 1.5)
-        .attr("class", "origin-point origin-point--destination")
-        .on("mouseover", () => {
-          tooltip
-            .transition()
-            .duration(200)
-            .style("opacity", 0.9);
-          tooltip
-            .html(`<p>${createCityName(event, type)}</p>`)
-            .style("left", d3.event.pageX + "px")
-            .style("top", d3.event.pageY - 28 + "px");
-        })
-        .on("mouseout", () => {
-          tooltip
-            .transition()
-            .duration(500)
-            .style("opacity", 0);
-        });
+      if (eventType === "create") {
+        // Card create events
+        this.createOriginPoint(event, originCoordinates);
+      } else if (eventType === "view") {
+        // Card view events
+        this.createDestinationPoint(event, destinationCoordinates);
+      } else if (!eventType) {
+        // ROI events
+        this.createOriginPoint(event, originCoordinates);
+        this.createDestinationPoint(event, destinationCoordinates);
+      }
     });
   }
 
@@ -141,6 +169,11 @@ class WorldMap extends Component {
     const linesNode = d3.select("#connectionLinesRef");
 
     data.forEach(event => {
+      const eventType = get(event, "type", null);
+      if (eventType === "create") {
+        return;
+      }
+
       const { olon, olat, dlon, dlat } = event;
       const origin = [olon, olat];
       const destination = [dlon, dlat];
