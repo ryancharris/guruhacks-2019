@@ -1,10 +1,10 @@
 import React, { Component, Fragment } from "react";
 import * as d3 from "d3";
 import { feature } from "topojson-client";
-import Delay from "react-delay";
+// import Delay from "react-delay";
 
-import CityDot from "./CityDot";
-import ConnectionLine from "./ConnectionLine";
+// import CityDot from "./CityDot";
+// import ConnectionLine from "./ConnectionLine";
 
 import "./WorldMap.scss";
 import worldMap from "./json/worldMap.json";
@@ -29,26 +29,6 @@ function createCityName(event) {
 }
 
 class WorldMap extends Component {
-  // createCityLabels(originCoords, destinationCoords) {
-  //   return roiOutput.map(event => {
-  //     const cityNames = createCityName(event);
-  //     const { originName, destinationName } = cityNames;
-
-  //     return (
-  //       <Fragment>
-  //         <text x={projection(originCoords)[0]} y={projection(originCoords)[1]}>
-  //           {originName}
-  //         </text>
-  //         <text
-  //           x={projection(destinationCoords)[0]}
-  //           y={projection(destinationCoords)[1]}
-  //         >
-  //           {destinationName}
-  //         </text>
-  //       </Fragment>
-  //     );
-  //   });
-  // }
   state = {
     worldMap: null,
     roiOutput: null
@@ -67,29 +47,65 @@ class WorldMap extends Component {
       .attr("class", "country");
   }
 
+  renderOriginPoints() {
+    const citiesNode = d3.select(this.refs.citiesRef);
+
+    roiOutput.forEach(event => {
+      const { olon, olat } = event;
+      const originCoordinates = [olon, olat];
+
+      citiesNode
+        .append("circle")
+        .attr("cx", projection(originCoordinates)[0])
+        .attr("cy", projection(originCoordinates)[1])
+        .attr("r", 3)
+        .attr("class", "origin-point origin-point--origin");
+    });
+  }
+
+  renderDestinationPoints() {
+    const citiesNode = d3.select(this.refs.citiesRef);
+
+    roiOutput.forEach(event => {
+      const { dlon, dlat } = event;
+      const destCoords = [dlon, dlat];
+
+      citiesNode
+        .append("circle")
+        .attr("cx", projection(destCoords)[0])
+        .attr("cy", projection(destCoords)[1])
+        .attr("r", 1.5)
+        .attr("class", "origin-point origin-point--destination");
+    });
+  }
+
+  renderConnectionLines() {
+    const linesNode = d3.select(this.refs.connectionLinesRef);
+
+    roiOutput.forEach(event => {
+      const { olon, olat, dlon, dlat } = event;
+      const origin = [olon, olat];
+      const destination = [dlon, dlat];
+
+      const coordData = [
+        [projection(origin)[0], projection(origin)[1]],
+        [projection(destination)[0], projection(destination)[1]]
+      ];
+      const lineGenerator = d3.line();
+      const pathString = lineGenerator(coordData);
+
+      linesNode
+        .append("path")
+        .attr("d", pathString)
+        .attr("class", "connection-line");
+    });
+  }
+
   componentDidMount() {
     this.renderCountries();
-  }
-
-  drawLine(origin, destination) {
-    const coordData = [
-      [projection(origin)[0], projection(origin)[1]],
-      [projection(destination)[0], projection(destination)[1]]
-    ];
-    const lineGenerator = d3.line();
-    const pathString = lineGenerator(coordData);
-
-    return <ConnectionLine pathString={pathString} />;
-  }
-
-  drawDot(name, coords, isOriginPoint) {
-    return (
-      <CityDot
-        xCoord={projection(coords)[0]}
-        yCoord={projection(coords)[1]}
-        isOrigin={isOriginPoint}
-      />
-    );
+    this.renderOriginPoints();
+    this.renderDestinationPoints();
+    this.renderConnectionLines();
   }
 
   render() {
@@ -101,37 +117,9 @@ class WorldMap extends Component {
             viewBox="0 0 950 500"
             xmlns="http://www.w3.org/2000/svg"
           >
-            {/* <g className="countries">
-              {countries.map(country => {
-                return <path className="country" d={path(country)} />;
-              })}
-            </g> */}
             <g className="countries" ref="countriesRef" />
-            <g className="markers">
-              {roiOutput.map((event, index) => {
-                const { olon, olat, dlon, dlat } = event;
-                const cityNames = createCityName(event);
-                const { originName, destinationName } = cityNames;
-                const originCoordinates = [olon, olat];
-                const destinationCoordinates = [dlon, dlat];
-
-                return (
-                  <Delay wait={index + 500}>
-                    {this.drawLine(originCoordinates, destinationCoordinates)}
-                    {this.drawDot(originName, originCoordinates, true)}
-                    {this.drawDot(
-                      destinationName,
-                      destinationCoordinates,
-                      false
-                    )}
-                    {/* {this.createCityLabels(
-                      originCoordinates,
-                      destinationCoordinates
-                    )} */}
-                  </Delay>
-                );
-              })}
-            </g>
+            <g className="cities" ref="citiesRef" />
+            <g className="connection-lines" ref="connectionLinesRef" />
           </svg>
         </div>
         <div className="WorldMap__footer">
