@@ -3,6 +3,9 @@ import * as d3 from "d3";
 import { feature } from "topojson-client";
 import Delay from "react-delay";
 
+import CityDot from "./CityDot";
+import ConnectionLine from "./ConnectionLine";
+
 import "./WorldMap.scss";
 import worldMap from "./json/worldMap.json";
 import roiOutput from "./json/roiOutput.json";
@@ -56,31 +59,16 @@ class WorldMap extends Component {
     const lineGenerator = d3.line();
     const pathString = lineGenerator(coordData);
 
-    return (
-      <path
-        className="connection-line"
-        d={pathString}
-        stroke={"#29cc96"}
-        strokeWidth={0.7}
-      />
-    );
+    return <ConnectionLine pathString={pathString} />;
   }
 
   drawDot(name, coords, isOriginPoint) {
-    const cn = isOriginPoint
-      ? "origin-point origin-point--origin"
-      : "origin-point origin-point--destination";
-
-    const radius = isOriginPoint ? 3 : 1.5;
     return (
-      <Fragment>
-        <circle
-          cx={projection(coords)[0]}
-          cy={projection(coords)[1]}
-          r={radius}
-          className={cn}
-        />
-      </Fragment>
+      <CityDot
+        xCoord={projection(coords)[0]}
+        yCoord={projection(coords)[1]}
+        isOrigin={isOriginPoint}
+      />
     );
   }
 
@@ -107,7 +95,7 @@ class WorldMap extends Component {
                 const destinationCoordinates = [dlon, dlat];
 
                 return (
-                  <Delay wait={index / 2}>
+                  <Delay wait={index + 500}>
                     {this.drawLine(originCoordinates, destinationCoordinates)}
                     {this.drawDot(originName, originCoordinates, true)}
                     {this.drawDot(
