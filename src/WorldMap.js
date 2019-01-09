@@ -34,6 +34,13 @@ class WorldMap extends Component {
     this.setState({ worldMap, roiOutput });
   }
 
+  componentDidMount() {
+    this.renderCountries();
+    this.renderOriginPoints();
+    this.renderDestinationPoints();
+    this.renderConnectionLines();
+  }
+
   renderCountries() {
     const countryNode = d3.select(this.refs.countriesRef);
     countryNode
@@ -117,15 +124,14 @@ class WorldMap extends Component {
       linesNode
         .append("path")
         .attr("d", pathString)
-        .attr("class", "connection-line");
+        .attr("class", "connection-line")
+        .on("mouseover", function() {
+          this.classList.add("connection-line--hover");
+        })
+        .on("mouseout", function() {
+          this.classList.remove("connection-line--hover");
+        });
     });
-  }
-
-  componentDidMount() {
-    this.renderCountries();
-    this.renderOriginPoints();
-    this.renderDestinationPoints();
-    this.renderConnectionLines();
   }
 
   render() {

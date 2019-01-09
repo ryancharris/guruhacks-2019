@@ -24,7 +24,7 @@ div.tooltip {
   }
 
   .origin-point {
-    animation: fadeIn 5s ease-in;
+    animation: fadeIn 10s ease-in;
     z-index: 10;
 
     &--origin {
@@ -43,7 +43,14 @@ div.tooltip {
     stroke: #29cc96;
     stroke-dasharray: 1000;
     stroke-dashoffset: 1000;
-    stroke-width: 0.7;
+    stroke-linecap: round;
+    stroke-width: 1;
+  }
+
+  .connection-line--hover {
+    stroke: #e62e6b;
+    stroke-width: 2px;
+    transition: all 100ms linear;
   }
 }
 
@@ -84,14 +91,10 @@ div.tooltip {
 
 @keyframes dash {
   0% {
-    // opacity: 1;
     stroke-dashoffset: 1000;
   }
-  // 90% {
-  //   opacity: 1;
-  // }
+
   100% {
-    // opacity: 0.35;
     stroke-dashoffset: 0;
   }
 }
