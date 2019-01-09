@@ -1,3 +1,21 @@
+div.tooltip {
+  align-items: center;
+  background: lightsteelblue;
+  border: 0px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  font-family: "Montserrat", sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  height: 20px;
+  justify-content: center;
+  padding: 8px;
+  pointer-events: none;
+  position: absolute;
+  width: auto;
+}
+
 .WorldMap {
   #mapSvg {
     height: 100vh;
@@ -11,7 +29,7 @@
   }
 
   .origin-point {
-    animation: fadeIn 5s ease-in;
+    animation: fadeIn 10s ease-in;
     z-index: 10;
 
     &--origin {
@@ -30,7 +48,14 @@
     stroke: #29cc96;
     stroke-dasharray: 1000;
     stroke-dashoffset: 1000;
-    stroke-width: 0.7;
+    stroke-linecap: round;
+    stroke-width: 1;
+  }
+
+  .connection-line--hover {
+    stroke: #e62e6b;
+    stroke-width: 2px;
+    transition: all 100ms linear;
   }
 }
 
@@ -39,25 +64,44 @@
   left: 0;
   position: absolute;
   right: 0;
-}
 
-.WorldMap__title,
-.WorldMap__sub-title {
-  color: #fff;
-  font-family: "Montserrat", sans-serif;
-  margin-top: 0;
-  text-align: center;
-  text-shadow: 3px 4px 3px rgba(230, 46, 107, 0.25);
-}
+  .WorldMap__title,
+  .WorldMap__sub-title {
+    color: #fff;
+    font-family: "Montserrat", sans-serif;
+    margin-top: 0;
+    text-align: center;
+    text-shadow: 3px 4px 3px rgba(230, 46, 107, 0.25);
+  }
 
-.WorldMap__title {
-  font-size: 36px;
-  margin-bottom: 15px;
-}
+  .WorldMap__title {
+    font-size: 36px;
+    margin-bottom: 15px;
+  }
 
-.WorldMap__sub-title {
-  font-size: 18px;
-  margin-bottom: 0;
+  .WorldMap__sub-title {
+    font-size: 18px;
+    margin-bottom: 0;
+  }
+
+  .WorldMap__buttons {
+    display: flex;
+    justify-content: center;
+    padding: 20px 10px;
+  }
+
+  .WorldMap__btn {
+    background: rebeccapurple;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.35);
+    color: #fff;
+    cursor: pointer;
+    font-family: "Montserrat", sans-serif;
+    font-size: 16px;
+    margin: 0 10px;
+    padding: 10px;
+  }
 }
 
 @keyframes fadeIn {
@@ -71,14 +115,10 @@
 
 @keyframes dash {
   0% {
-    // opacity: 1;
     stroke-dashoffset: 1000;
   }
-  // 90% {
-  //   opacity: 1;
-  // }
+
   100% {
-    // opacity: 0.35;
     stroke-dashoffset: 0;
   }
 }
