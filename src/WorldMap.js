@@ -15,7 +15,6 @@ const projection = d3
   .scale(150)
   .translate([950 / 2, 500 / 2]);
 const path = d3.geoPath(projection);
-const countries = feature(worldMap, worldMap.objects.countries).features;
 
 function createCityName(event) {
   const { dcity, dstate, dcountry, ocity, ostate, ocountry } = event;
@@ -61,8 +60,12 @@ class WorldMap extends Component {
 
   componentDidMount() {
     const countryNode = d3.select(this.refs.countriesRef);
-    console.log("node", countryNode);
-    countryNode.append("path").attr("class", "country");
+
+    countryNode
+      .append("path")
+      .datum(feature(worldMap, worldMap.objects.countries))
+      .attr("d", path)
+      .attr("class", "country");
   }
 
   drawLine(origin, destination) {
