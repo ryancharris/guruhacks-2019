@@ -93,7 +93,13 @@ class WorldMap extends Component {
       linesNode
         .append("path")
         .attr("d", pathString)
-        .attr("class", "connection-line");
+        .attr("class", "connection-line")
+        .on("mouseover", function() {
+          this.classList.add("connection-line--hover");
+        })
+        .on("mouseout", function() {
+          this.classList.remove("connection-line--hover");
+        });
     });
   }
 

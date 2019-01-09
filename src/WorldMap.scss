@@ -30,7 +30,14 @@
     stroke: #29cc96;
     stroke-dasharray: 1000;
     stroke-dashoffset: 1000;
-    stroke-width: 0.7;
+    stroke-linecap: round;
+    stroke-width: 1;
+  }
+
+  .connection-line--hover {
+    stroke: #e62e6b;
+    stroke-width: 2px;
+    transition: all 100ms ease-in-out;
   }
 }
 
