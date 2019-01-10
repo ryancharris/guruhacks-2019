@@ -236,7 +236,9 @@ class WorldMap extends Component {
               Card Events
             </button>
           </div>
-          <div className="WorldMap__legend" />
+        </div>
+        <div className="WorldMap__legend">
+          <h1>hey</h1>
         </div>
       </Fragment>
     );
