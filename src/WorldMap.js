@@ -65,7 +65,9 @@ class WorldMap extends Component {
 
     if (data !== null) {
       this.renderCityDots();
-      this.renderConnectionLines();
+      d3.timeout(() => {
+        this.renderConnectionLines();
+      }, 3000);
     }
   }
 
@@ -102,8 +104,7 @@ class WorldMap extends Component {
       })
       .attr("r", 0)
       .transition()
-      .duration(5000)
-      .delay(1000)
+      .duration(1000)
       .attr("r", 3);
   }
 
@@ -140,8 +141,7 @@ class WorldMap extends Component {
       })
       .attr("r", 0)
       .transition()
-      .duration(5000)
-      .delay(1000)
+      .duration(1000)
       .attr("r", 1.5);
   }
 
@@ -214,8 +214,12 @@ class WorldMap extends Component {
           })
           .on("mouseout", function() {
             this.classList.remove("connection-line--hover");
-          });
-      }, (index + 100) * 2);
+          })
+          .style("stroke-dashoffset", 1000)
+          .transition()
+          .duration(2000)
+          .style("stroke-dashoffset", 0);
+      }, (index + 200) * 6);
     });
   }
 

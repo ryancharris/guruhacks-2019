@@ -17,11 +17,12 @@ div.tooltip {
 }
 
 .WorldMap__legend {
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(102, 51, 153, 0.35);
   border: 2px solid #fff;
   border-radius: 5px;
   bottom: 2%;
   box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.35);
+  color: #fff;
   display: flex;
   flex-direction: column;
   font-family: "Montserrat", sans-serif;
@@ -36,6 +37,7 @@ div.tooltip {
     align-items: center;
     display: flex;
     flex-direction: row;
+    font-size: 16px;
     height: 50%;
     justify-content: center;
 
@@ -78,12 +80,8 @@ div.tooltip {
   }
 
   .connection-line {
-    animation: dash 5s linear;
-    animation-delay: 5s;
-    animation-fill-mode: forwards;
     stroke: rgba(41, 204, 150, 0.25);
     stroke-dasharray: 1000;
-    stroke-dashoffset: 1000;
     stroke-linecap: round;
     stroke-width: 1;
   }
@@ -91,7 +89,7 @@ div.tooltip {
   .connection-line--hover {
     stroke: #e62e6b;
     stroke-width: 2px;
-    transition: all 100ms linear;
+    transition: stroke-width 100ms linear;
   }
 }
 
@@ -126,7 +124,7 @@ div.tooltip {
   }
 
   .WorldMap__btn {
-    background: rebeccapurple;
+    background: rgba(102, 51, 153, 0.35);
     border: 2px solid #fff;
     border-radius: 5px;
     box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.35);
@@ -136,24 +134,5 @@ div.tooltip {
     font-size: 16px;
     margin: 0 10px;
     padding: 10px;
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes dash {
-  0% {
-    stroke-dashoffset: 1000;
-  }
-
-  100% {
-    stroke-dashoffset: 0;
   }
 }
