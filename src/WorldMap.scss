@@ -66,14 +66,15 @@ div.tooltip {
   }
 
   .origin-point {
-    animation: fadeIn 10s ease-in;
     z-index: 10;
 
     &--origin {
+      animation: originFadeIn 2s ease-in;
       fill: #e62e6b;
     }
 
     &--destination {
+      animation: destinationFadeIn 2s ease-in;
       fill: #005dff;
     }
   }
@@ -82,7 +83,7 @@ div.tooltip {
     animation: dash 5s linear;
     animation-delay: 5s;
     animation-fill-mode: forwards;
-    stroke: #29cc96;
+    stroke: rgba(41, 204, 150, 0.25);
     stroke-dasharray: 1000;
     stroke-dashoffset: 1000;
     stroke-linecap: round;
@@ -146,6 +147,24 @@ div.tooltip {
   }
   to {
     opacity: 1;
+  }
+}
+
+@keyframes originFadeIn {
+  from {
+    fill: rgba(230, 46, 107, 0);
+  }
+  to {
+    fill: rgba(230, 46, 107, 1);
+  }
+}
+
+@keyframes destinationFadeIn {
+  from {
+    fill: rgba(0, 93, 255, 0);
+  }
+  to {
+    fill: rgba(0, 93, 255, 1);
   }
 }
 

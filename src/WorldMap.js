@@ -29,7 +29,7 @@ class WorldMap extends Component {
   state = {
     worldMap: worldMap,
     data: null,
-    title: "guruHacks 2019",
+    title: "Guru Worldwide",
     subtitle: "by Lisa, Pete & Ryan H."
   };
 
@@ -83,7 +83,6 @@ class WorldMap extends Component {
       .append("circle")
       .attr("cx", projection(originCoordinates)[0])
       .attr("cy", projection(originCoordinates)[1])
-      .attr("r", 3)
       .attr("class", "origin-point origin-point--origin")
       .on("mouseover", () => {
         tooltip
@@ -100,7 +99,12 @@ class WorldMap extends Component {
           .transition()
           .duration(500)
           .style("opacity", 0);
-      });
+      })
+      .attr("r", 0)
+      .transition()
+      .duration(5000)
+      .delay(1000)
+      .attr("r", 3);
   }
 
   createDestinationPoint(event, destinationCoordinates) {
@@ -117,7 +121,6 @@ class WorldMap extends Component {
       .append("circle")
       .attr("cx", projection(destinationCoordinates)[0])
       .attr("cy", projection(destinationCoordinates)[1])
-      .attr("r", 1.5)
       .attr("class", "origin-point origin-point--destination")
       .on("mouseover", () => {
         tooltip
@@ -134,7 +137,12 @@ class WorldMap extends Component {
           .transition()
           .duration(500)
           .style("opacity", 0);
-      });
+      })
+      .attr("r", 0)
+      .transition()
+      .duration(5000)
+      .delay(1000)
+      .attr("r", 1.5);
   }
 
   renderCountries() {
@@ -233,7 +241,7 @@ class WorldMap extends Component {
     d3.selectAll(".tooltip").remove();
 
     this.setState({
-      title: "guruHacks 2019",
+      title: "Guru Worldwide",
       subtitle: "by Lisa, Pete & Ryan H.",
       data: null
     });
