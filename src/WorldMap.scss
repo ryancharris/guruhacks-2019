@@ -17,21 +17,37 @@ div.tooltip {
 }
 
 .WorldMap__legend {
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.7);
   border: 2px solid #fff;
   border-radius: 5px;
   bottom: 0;
   box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.35);
   display: flex;
   flex-direction: column;
+  font-family: "Montserrat", sans-serif;
+  font-size: 13px;
+  font-weight: bold;
   height: 85px;
   position: absolute;
   right: 0;
   width: 100px;
 
   .WorldMap__legend-item {
-    border: 1px solid black; // just for testing
+    align-items: center;
+    display: flex;
+    flex-direction: row;
     height: 50%;
+    justify-content: center;
+
+    .WorldMap__legend-symbol {
+      display: flex;
+      padding: 5px;
+    }
+
+    .WorldMap__legend-label {
+      display: flex;
+      padding: 5px;
+    }
   }
 }
 

@@ -238,8 +238,26 @@ class WorldMap extends Component {
           </div>
         </div>
         <div className="WorldMap__legend">
-          <div className="WorldMap__legend-item" />
-          <div className="WorldMap__legend-item" />
+          <div className="WorldMap__legend-item">
+            <span className="WorldMap__legend-symbol">
+              <svg height="14" width="14">
+                <g transform="translate(7,7)">
+                  <circle cx="0" cy="0" r="7" fill="#e62e6b" />
+                </g>
+              </svg>
+            </span>
+            <span className="WorldMap__legend-label">Created</span>
+          </div>
+          <div className="WorldMap__legend-item">
+            <span className="WorldMap__legend-symbol">
+              <svg height="14" width="14">
+                <g transform="translate(7,7)">
+                  <circle cx="0" cy="0" r="7" fill="#005dff" />
+                </g>
+              </svg>
+            </span>
+            <span className="WorldMap__legend-label">Viewed</span>
+          </div>
         </div>
       </Fragment>
     );
