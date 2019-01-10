@@ -157,7 +157,7 @@ class WorldMap extends Component {
   renderCityDots() {
     const { data } = this.state;
 
-    data.forEach(event => {
+    data.forEach((event, index) => {
       const { dlon, dlat, olon, olat } = event;
       const eventType = get(event, "type", null);
       const originCoordinates = [olon, olat];
@@ -165,14 +165,20 @@ class WorldMap extends Component {
 
       if (eventType === "create") {
         // Card create events
-        this.createOriginPoint(event, originCoordinates);
+        d3.timeout(() => {
+          this.createOriginPoint(event, originCoordinates);
+        }, (index + 200) * 10);
       } else if (eventType === "view") {
         // Card view events
-        this.createDestinationPoint(event, destinationCoordinates);
+        d3.timeout(() => {
+          this.createDestinationPoint(event, destinationCoordinates);
+        }, (index + 200) * 10);
       } else if (!eventType) {
         // ROI events
-        this.createOriginPoint(event, originCoordinates);
-        this.createDestinationPoint(event, destinationCoordinates);
+        d3.timeout(() => {
+          this.createOriginPoint(event, originCoordinates);
+          this.createDestinationPoint(event, destinationCoordinates);
+        }, (index + 200) * 10);
       }
     });
   }
@@ -181,7 +187,7 @@ class WorldMap extends Component {
     const { data } = this.state;
     const linesNode = d3.select("#connectionLinesRef");
 
-    data.forEach(event => {
+    data.forEach((event, index) => {
       const eventType = get(event, "type", null);
       if (eventType === "create") {
         return;
@@ -198,16 +204,18 @@ class WorldMap extends Component {
       const lineGenerator = d3.line();
       const pathString = lineGenerator(coordData);
 
-      linesNode
-        .append("path")
-        .attr("d", pathString)
-        .attr("class", "connection-line")
-        .on("mouseover", function() {
-          this.classList.add("connection-line--hover");
-        })
-        .on("mouseout", function() {
-          this.classList.remove("connection-line--hover");
-        });
+      d3.timeout(() => {
+        linesNode
+          .append("path")
+          .attr("d", pathString)
+          .attr("class", "connection-line")
+          .on("mouseover", function() {
+            this.classList.add("connection-line--hover");
+          })
+          .on("mouseout", function() {
+            this.classList.remove("connection-line--hover");
+          });
+      }, (index + 100) * 2);
     });
   }
 

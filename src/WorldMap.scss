@@ -69,12 +69,10 @@ div.tooltip {
     z-index: 10;
 
     &--origin {
-      animation: originFadeIn 2s ease-in;
       fill: #e62e6b;
     }
 
     &--destination {
-      animation: destinationFadeIn 2s ease-in;
       fill: #005dff;
     }
   }
@@ -147,24 +145,6 @@ div.tooltip {
   }
   to {
     opacity: 1;
-  }
-}
-
-@keyframes originFadeIn {
-  from {
-    fill: rgba(230, 46, 107, 0);
-  }
-  to {
-    fill: rgba(230, 46, 107, 1);
-  }
-}
-
-@keyframes destinationFadeIn {
-  from {
-    fill: rgba(0, 93, 255, 0);
-  }
-  to {
-    fill: rgba(0, 93, 255, 1);
   }
 }
 
