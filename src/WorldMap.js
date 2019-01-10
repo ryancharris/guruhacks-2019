@@ -19,7 +19,8 @@ function createCityName(event, type) {
   const destination = `${dcity}, ${dstate} ${dcountry}`;
   const origin = `${ocity}, ${ostate} ${ocountry}`;
   const cleanedOrigin = origin.replace(/"/g, "");
-  const location = type === "origin" ? cleanedOrigin : destination;
+  const cleanedDestination = destination.replace(/"/g, "");
+  const location = type === "origin" ? cleanedOrigin : cleanedDestination;
 
   return location;
 }
