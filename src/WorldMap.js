@@ -203,12 +203,14 @@ class WorldMap extends Component {
       ];
       const lineGenerator = d3.line();
       const pathString = lineGenerator(coordData);
+      const strokeColor = this.getRandomColor();
 
       d3.timeout(() => {
         linesNode
           .append("path")
           .attr("d", pathString)
           .attr("class", "connection-line")
+          .style("stroke", strokeColor)
           .on("mouseover", function() {
             this.classList.add("connection-line--hover");
           })
@@ -221,6 +223,18 @@ class WorldMap extends Component {
           .style("stroke-dashoffset", 0);
       }, (index + 200) * 6);
     });
+  }
+
+  getRandomColor() {
+    const colors = [
+      "rgba(154, 60, 111, 0.25)",
+      "rgba(252, 193, 214, 0.25)",
+      "rgba(213, 194, 252, 0.25)",
+      "rgba(69. 54. 196, 0.25)",
+      "rgba(255, 224, 102, 0.25)"
+    ];
+    const index = Math.floor(Math.random() * 5);
+    return colors[index];
   }
 
   handleCardClick = () => {
@@ -261,6 +275,7 @@ class WorldMap extends Component {
 
   render() {
     const { subtitle, title } = this.state;
+    this.getRandomColor();
     return (
       <Fragment>
         <div className="WorldMap" id="worldMapRef" />
