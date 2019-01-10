@@ -20,17 +20,17 @@ div.tooltip {
   background: rgba(255, 255, 255, 0.7);
   border: 2px solid #fff;
   border-radius: 5px;
-  bottom: 0;
+  bottom: 2%;
   box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.35);
   display: flex;
   flex-direction: column;
   font-family: "Montserrat", sans-serif;
   font-size: 13px;
   font-weight: bold;
-  height: 85px;
+  height: 65px;
   position: absolute;
-  right: 0;
-  width: 100px;
+  right: 2%;
+  width: 125px;
 
   .WorldMap__legend-item {
     align-items: center;

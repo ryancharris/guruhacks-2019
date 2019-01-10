@@ -49,12 +49,12 @@ class WorldMap extends Component {
       .attr("id", "countriesRef");
     svg
       .append("g")
-      .attr("class", "cities")
-      .attr("id", "citiesRef");
-    svg
-      .append("g")
       .attr("class", "connection-lines")
       .attr("id", "connectionLinesRef");
+    svg
+      .append("g")
+      .attr("class", "cities")
+      .attr("id", "citiesRef");
 
     this.renderCountries();
   }
