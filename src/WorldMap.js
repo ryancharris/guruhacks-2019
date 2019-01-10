@@ -100,7 +100,7 @@ class WorldMap extends Component {
 
   createDestinationPoint(event, destinationCoordinates) {
     const citiesNode = d3.select("#citiesRef");
-    const type = "origin";
+    const type = "destination";
 
     const tooltip = d3
       .select("body")
