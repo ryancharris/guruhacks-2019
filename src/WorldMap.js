@@ -238,7 +238,8 @@ class WorldMap extends Component {
           </div>
         </div>
         <div className="WorldMap__legend">
-          <h1>hey</h1>
+          <div className="WorldMap__legend-item" />
+          <div className="WorldMap__legend-item" />
         </div>
       </Fragment>
     );
