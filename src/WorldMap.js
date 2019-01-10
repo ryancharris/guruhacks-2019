@@ -9,7 +9,7 @@ import roiOutput from "./json/roiOutput.json";
 import cardData from "./json/createViewData.json";
 
 const projection = d3
-  .geoMercator() // or geoEquirectangular
+  .geoMercator()
   .scale(150)
   .translate([950 / 2, 500 / 2]);
 const path = d3.geoPath(projection);
@@ -61,8 +61,12 @@ class WorldMap extends Component {
   }
 
   componentDidUpdate() {
-    this.renderCityDots();
-    this.renderConnectionLines();
+    const { data } = this.state;
+
+    if (data !== null) {
+      this.renderCityDots();
+      this.renderConnectionLines();
+    }
   }
 
   createOriginPoint(event, originCoordinates) {
@@ -202,6 +206,7 @@ class WorldMap extends Component {
   handleCardClick = () => {
     d3.selectAll(".connection-line").remove();
     d3.selectAll(".origin-point").remove();
+    d3.selectAll(".tooltip").remove();
 
     this.setState({
       title: "Guru Card Events",
@@ -213,11 +218,24 @@ class WorldMap extends Component {
   handleContentClick = () => {
     d3.selectAll(".connection-line").remove();
     d3.selectAll(".origin-point").remove();
+    d3.selectAll(".tooltip").remove();
 
     this.setState({
       title: "Content ROI Events",
       subtitle: "All Time",
       data: roiOutput
+    });
+  };
+
+  handleClearClick = () => {
+    d3.selectAll(".connection-line").remove();
+    d3.selectAll(".origin-point").remove();
+    d3.selectAll(".tooltip").remove();
+
+    this.setState({
+      title: "guruHacks 2019",
+      subtitle: "by Lisa, Pete & Ryan H.",
+      data: null
     });
   };
 
@@ -235,6 +253,9 @@ class WorldMap extends Component {
             </button>
             <button className="WorldMap__btn" onClick={this.handleCardClick}>
               Card Events
+            </button>
+            <button className="WorldMap__btn" onClick={this.handleClearClick}>
+              Clear
             </button>
           </div>
         </div>
